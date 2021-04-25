@@ -14,7 +14,7 @@ export class Answer {
     @Column({name: 'Answer_text'})
     answer_text: string;
 
-    @Column({name: 'Mark'})
+    @Column({name: 'Mark', default: 0})
     mark: number;
 
     @Column({name: 'Keywords'})

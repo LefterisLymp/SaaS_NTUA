@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Answer } from '../answers/answer.entity';
 
 @Entity({name: 'questions'})
 export class Question {
@@ -16,4 +17,7 @@ export class Question {
 
   @Column({name: 'AskedOn'})
   asked_on: Date;
+
+  @OneToMany(type => Answer, answer => answer.question_id)
+  answers: Answer[];
 }
