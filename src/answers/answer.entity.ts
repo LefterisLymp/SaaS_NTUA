@@ -28,4 +28,5 @@ export class Answer {
     @ManyToOne(() => Question, Question => Question.answers, {nullable: false, onDelete: "CASCADE"})
     @JoinColumn({name: 'question_id'})
     question: Question;
+    answer: Promise<Question>;
 }
