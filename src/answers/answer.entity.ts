@@ -27,5 +27,5 @@ export class Answer {
 
     @ManyToOne(() => Question, Question => Question.answers, {nullable: false, onDelete: "CASCADE"})
     @JoinColumn({name: 'question_id'})
-    q_id: number;
+    question: Question;
 }
