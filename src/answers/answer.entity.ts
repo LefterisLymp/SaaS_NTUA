@@ -1,4 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
+import {Question} from "../questions/question.entity";
+import {Injectable} from "@nestjs/common";
 
 @Entity({name: 'answers'})
 export class Answer {
@@ -22,4 +24,8 @@ export class Answer {
 
     @Column({name: 'AnsweredOn'})
     answered_on: Date;
+
+    @ManyToOne(() => Question, Question => Question.answers, {nullable: false, onDelete: "CASCADE"})
+    @JoinColumn({name: 'question_id'})
+    q_id: number;
 }
