@@ -5,10 +5,12 @@ import {CreateQuestionDto} from "../questions/create.question.dto";
 import {UpdateQuestionDto} from "../questions/update.question.dto";
 import {NotFoundException} from "@nestjs/common";
 
-export class Answer_Service {
+export class QuestionService {
     constructor(@InjectEntityManager() private manager: EntityManager) {}
 
-    async CreateAnswer (create_question_dto: CreateQuestionDto): Promise<Question> {
+    async getHello(): Promise<string> {return "Hello! Questions only."}
+
+    async CreateQuestion (create_question_dto: CreateQuestionDto): Promise<Question> {
         const question = await this.manager.create(Question, create_question_dto)
         return this.manager.save(question);
     }

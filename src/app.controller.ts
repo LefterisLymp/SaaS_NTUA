@@ -1,12 +1,18 @@
-import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service';
+import { Controller, Get, Post, Body } from '@nestjs/common';
+import {QuestionService} from "./services/create_question_service";
+import {CreateQuestionDto} from "./questions/create.question.dto";
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(private readonly questionService: QuestionService) {}
 
   @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  getHello(): Promise<string> {
+    return this.questionService.getHello();
+  }
+
+  @Post('/questions')
+  createQuestion(@Body() createquestiondto: CreateQuestionDto) {
+    return this.questionService.CreateQuestion(createquestiondto);
   }
 }

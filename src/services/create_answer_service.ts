@@ -6,7 +6,7 @@ import {CreateAnswerDto} from "../answers/create.answer.dto";
 import {UpdateAnswerDto} from "../answers/update.answer.dto";
 import {BadRequestException, NotFoundException} from "@nestjs/common";
 
-export class Answer_Service {
+export class AnswerService {
     constructor(@InjectEntityManager() private manager: EntityManager) {}
 
     async CreateAnswer (id: number, create_answer_dto: CreateAnswerDto): Promise<Answer> {

@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users/user.entity';
 import { Question } from './questions/question.entity';
 import { Answer } from './answers/answer.entity';
+import {QuestionService} from "./services/create_question_service";
 
 @Module({
   imports: [
@@ -19,5 +20,7 @@ import { Answer } from './answers/answer.entity';
       synchronize: true,
     }),
   ],
+  providers: [AppService, QuestionService],
+  controllers: [AppController]
 })
 export class AppModule {}
