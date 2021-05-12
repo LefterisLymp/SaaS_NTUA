@@ -24,7 +24,7 @@ export class QuestionService {
             const question = await this.manager.create(Question, create_question_dto);
             for (let i = 0; i < create_question_dto.keywords.length; i++) {
                 const keyword_finder = await this.manager.create(Keyword_Finder, {keyword:create_question_dto.keywords[i], question_id: question.id});
-                this.manager.save(keyword_finder);
+                await this.manager.save(keyword_finder);
             }
             return this.manager.save(question);
         })
@@ -45,7 +45,7 @@ export class QuestionService {
             await this.manager.merge(Question, question, update_question_dto);
             for (let i = 0; i < update_question_dto.keywords.length; i++) {
                 const keyword_finder = await this.manager.create(Keyword_Finder, {keyword:update_question_dto.keywords[i], question_id: question.id});
-                this.manager.save(keyword_finder);
+                await this.manager.save(keyword_finder);
             }
             return this.manager.save(question);
         })

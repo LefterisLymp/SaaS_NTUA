@@ -1,6 +1,7 @@
 import {Question} from '../questions/question.entity'
 import {EntityManager} from 'typeorm'
 import { InjectEntityManager } from '@nestjs/typeorm'
+import {Keyword_Finder} from "../keyword_finder/keyword_finder.entity";
 
 export class Search_question_service{
 
@@ -8,13 +9,20 @@ export class Search_question_service{
 
     // @ts-ignore
     async filter_by_keyword(questions: Question[], keyword:string): Promise<Question[]> {
-        let answer: Question[]
-        for (let i = 0; i < questions.length; i++) {
-            if (questions[i]["keywords"].includes(keyword)) {
-                answer.push(questions[i])
+        return this.manager.transaction(async manager => {
+            let answer: Question[]
+            const quest = await this.manager.find(Keyword_Finder, {keyword: keyword})
+            let ids: Set<number>
+            for (let i = 0; i < quest.length; i++) {
+                ids.add(quest[i]["question_id"]);
             }
-        }
-        return answer
+
+            for (let i = 0; i < questions.length; i++) {
+                if (ids.has(questions[i]["id"])) {
+                    answer.push(questions[i]);
+                }
+            }
+            return answer})
     }
 
     async filter_by_date(questions: Question[], from_date: Date, to_date: Date) {
@@ -25,6 +33,18 @@ export class Search_question_service{
             }
         }
         return answer
+    }
+
+    async search_by_keyword(keyword: string): Promise<Question[]> {
+        return this.manager.transaction(async manager => {
+            const questions = await this.manager.find(Keyword_Finder, {keyword: keyword})
+            let answer: Question[]
+            for (let i = 0; i < questions.length; i++) {
+                const qu = await this.manager.findOne(Question, {id: questions[i]["question_id"]});
+                answer.push(qu);
+            }
+            return answer;
+        })
     }
 
 
