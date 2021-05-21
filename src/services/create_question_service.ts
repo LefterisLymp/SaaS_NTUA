@@ -14,6 +14,7 @@ export class QuestionService {
 
     async CreateQuestion (create_question_dto: CreateQuestionDto): Promise<Question> {
         return this.manager.transaction(async manager => {
+            create_question_dto.keywords = JSON.parse(create_question_dto.keywords.toString());
             for (let i = 0; i < create_question_dto.keywords.length; i++) {
                 const keyw = await this.manager.findOne(Keyword, {keyword: create_question_dto.keywords[i]});
                 if (!keyw)  {
@@ -21,12 +22,25 @@ export class QuestionService {
                     await this.manager.save(keyw);
                 }
             }
-            const question = await this.manager.create(Question, create_question_dto);
+            /*Creating the date*/
+            var date;
+            date = new Date();
+            date = date.getFullYear() + '-' +
+                ('00' + (date.getMonth()+1)).slice(-2) + '-' +
+                ('00' + date.getDate()).slice(-2) + ' ' +
+                ('00' + date.getHours()).slice(-2) + ':' +
+                ('00' + date.getMinutes()).slice(-2) + ':' +
+                ('00' + date.getSeconds()).slice(-2);
+            create_question_dto["asked_on"] = date;
+            /*--------*/
+            let question = await this.manager.create(Question, create_question_dto);
+            question.keywords = create_question_dto["keywords"]
+            question = await this.manager.save(question);
             for (let i = 0; i < create_question_dto.keywords.length; i++) {
                 const keyword_finder = await this.manager.create(Keyword_Finder, {keyword:create_question_dto.keywords[i], question_id: question.id});
                 await this.manager.save(keyword_finder);
             }
-            return this.manager.save(question);
+            return question;
         })
     }
 

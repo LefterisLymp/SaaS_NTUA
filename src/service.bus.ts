@@ -3,7 +3,7 @@ import {QuestionService} from "./services/create_question_service";
 import {CreateQuestionDto} from "./questions/create.question.dto";
 
 @Controller()
-export class AppController {
+export class ServiceBus {
   constructor(private readonly questionService: QuestionService) {}
 
   @Get()

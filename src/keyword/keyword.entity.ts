@@ -1,8 +1,7 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Entity, Column, PrimaryColumn} from 'typeorm';
 
 @Entity({name: 'keyword'})
 export class Keyword {
-    @PrimaryGeneratedColumn({name: 'keyword'})
+    @PrimaryColumn({name: 'keyword'})
     keyword: string;
-
 }
