@@ -2,6 +2,7 @@ import {Question} from '../questions/question.entity'
 import {EntityManager} from 'typeorm'
 import { InjectEntityManager } from '@nestjs/typeorm'
 import {Keyword_Finder} from "../keyword_finder/keyword_finder.entity";
+import {Keyword} from "../keyword/keyword.entity";
 
 export class Search_question_service{
 
@@ -46,5 +47,15 @@ export class Search_question_service{
         })
     }
 
+
+    async questions_per_keyword(keywords: Keyword[]) {
+        return this.manager.transaction(async manager => {
+            const answer = [];
+            for (let i = 0; i < keywords.length; i++) {
+                const count = await this.manager.find(Keyword_Finder, {keyword: keywords[i]["keyword"]})
+                answer.push([keywords[i]["keyword"],count.length]);
+            }
+            return answer})
+    }    
 
 }
