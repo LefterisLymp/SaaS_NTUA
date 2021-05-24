@@ -49,7 +49,7 @@ export class Search_question_service{
     }
 
 
-    async questions_per_keyword(keywords: Keyword[]): Promise<Keyword[]> {
+    async questions_per_keyword(keywords: Keyword[]) {
         return this.manager.transaction(async manager => {
             const answer = [];
             for (let i = 0; i < keywords.length; i++) {
