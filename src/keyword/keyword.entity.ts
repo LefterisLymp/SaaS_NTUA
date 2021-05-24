@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryColumn} from 'typeorm';
+import { Entity, Column, PrimaryColumn, ManyToOne, ManyToMany} from 'typeorm';
+import {Question} from "../questions/question.entity";
 
 @Entity({name: 'keyword'})
 export class Keyword {

@@ -7,7 +7,6 @@ export class Search_question_service{
 
     constructor(@InjectEntityManager() private manager: EntityManager) {}
 
-    // @ts-ignore
     async filter_by_keyword(questions: Question[], keyword:string): Promise<Question[]> {
         return this.manager.transaction(async manager => {
             let answer: Question[]

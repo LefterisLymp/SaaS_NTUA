@@ -46,22 +46,27 @@ export class QuestionService {
 
     async UpdateQuestion (id: number, update_question_dto: UpdateQuestionDto): Promise<Question> {
         return this.manager.transaction(async manager => {
-            const question = await this.manager.findOne(Question, id)
+            let question = await this.manager.findOne(Question, id)
             if (!question) throw new NotFoundException('Question ${id} not found.');
+            update_question_dto.keywords = JSON.parse(update_question_dto.keywords.toString());
             for (let i = 0; i < update_question_dto.keywords.length; i++) {
-                const keyw = await this.manager.findOne(Keyword, {keyword: update_question_dto.keywords[i]})
-                if (!keyw) {
+                const keyw = await this.manager.findOne(Keyword, {keyword: update_question_dto.keywords[i]});
+                if (!keyw)  {
                     const keyw = await this.manager.create(Keyword, {keyword: update_question_dto.keywords[i]});
                     await this.manager.save(keyw);
                 }
             }
             await this.manager.delete(Keyword_Finder, {question_id: question.id})
-            await this.manager.merge(Question, question, update_question_dto);
+            console.log(update_question_dto);
+            let question_upd = this.manager.merge(Question, question, update_question_dto);
+            question_upd["keywords"] = update_question_dto["keywords"]
+            await console.log(question_upd.id)
             for (let i = 0; i < update_question_dto.keywords.length; i++) {
-                const keyword_finder = await this.manager.create(Keyword_Finder, {keyword:update_question_dto.keywords[i], question_id: question.id});
+                console.log(update_question_dto.keywords[i])
+                const keyword_finder = await this.manager.create(Keyword_Finder, {keyword:update_question_dto.keywords[i], question_id: question_upd.id});
                 await this.manager.save(keyword_finder);
             }
-            return this.manager.save(question);
+            return question_upd;
         })
     }
 
@@ -72,5 +77,11 @@ export class QuestionService {
             await manager.delete(Keyword_Finder, {question_id: question.id});
             await manager.delete(Question, id);
         })
+    }
+
+    async View_by_id(id:number): Promise<Question> {
+        // @ts-ignore
+        return await this.manager.findBy
+        return await this.manager.findByIds(Question, [id])
     }
 }

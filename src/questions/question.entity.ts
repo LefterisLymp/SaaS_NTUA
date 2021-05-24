@@ -1,6 +1,7 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, JoinColumn } from 'typeorm';
 import { Answer } from '../answers/answer.entity';
 import { Keyword } from '../keyword/keyword.entity'
+import {Keyword_Finder} from "../keyword_finder/keyword_finder.entity";
 
 @Entity({name: 'questions'})
 export class Question {
@@ -19,6 +20,7 @@ export class Question {
   @OneToMany(type => Answer, answer => answer.question_id)
   answers: Answer[];
 
-  @OneToMany(type => Keyword, keyword => keyword)
+  @OneToMany(type => Keyword_Finder, Keyword_Finder => Keyword_Finder.question_id)
+  @JoinColumn()
   keywords: string[];
 }
