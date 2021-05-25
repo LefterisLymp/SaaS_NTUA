@@ -8,6 +8,7 @@ import { Answer } from './answers/answer.entity';
 import {QuestionService} from "./services/create_question_service";
 import {Keyword_Finder} from "./keyword_finder/keyword_finder.entity";
 import {Keyword} from "./keyword/keyword.entity";
+import {AnswerService} from "./services/create_answer_service";
 
 @Module({
   imports: [
@@ -22,7 +23,7 @@ import {Keyword} from "./keyword/keyword.entity";
       synchronize: true,
     }),
   ],
-  providers: [AppService, QuestionService],
+  providers: [AppService, QuestionService, AnswerService],
   controllers: [ServiceBus]
 })
 export class AppModule {}

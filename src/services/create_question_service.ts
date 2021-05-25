@@ -6,6 +6,7 @@ import {CreateQuestionDto} from "../questions/create.question.dto";
 import {UpdateQuestionDto} from "../questions/update.question.dto";
 import {NotFoundException} from "@nestjs/common";
 import {Keyword_Finder} from "../keyword_finder/keyword_finder.entity";
+import {Answer} from "../answers/answer.entity";
 
 export class QuestionService {
     constructor(@InjectEntityManager() private manager: EntityManager) {}
@@ -103,6 +104,10 @@ export class QuestionService {
                 keywords.push(keyword_finders[i]["keyword"])
             }
             question["keywords"] = keywords
+            let answers = await this.manager.find(Answer, {question_id: id})
+            // @ts-ignore
+            answers = answers.sort((a, b) => b.answered_on - a.answered_on);
+            question["answers"] = answers;
             return question;
         })
     }

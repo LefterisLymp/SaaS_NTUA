@@ -3,10 +3,15 @@ import {QuestionService} from "./services/create_question_service";
 import {CreateQuestionDto} from "./questions/create.question.dto";
 import {Question} from "./questions/question.entity";
 import {UpdateQuestionDto} from "./questions/update.question.dto";
+import {CreateAnswerDto} from "./answers/create.answer.dto";
+import {Answer} from "./answers/answer.entity";
+import {AnswerService} from "./services/create_answer_service";
+import { UpdateAnswerDto } from "./answers/update.answer.dto";
 
 @Controller()
 export class ServiceBus {
-  constructor(private readonly questionService: QuestionService) {}
+  constructor(private readonly questionService: QuestionService,
+              private readonly answerService: AnswerService) {}
 
   @Get()
   getHello(): Promise<string> {
@@ -32,5 +37,28 @@ export class ServiceBus {
   deleteQuestion(@Param('id', new ParseIntPipe()) id): Promise<void> {
     return this.questionService.DeleteQuestion(id)
   }
+  //End of question endpoints
+
+  //Answer endpoints
+  @Post('/api/answer/create')
+  createAnswer (@Body() createanswerdto: CreateAnswerDto): Promise<Answer> {
+    return this.answerService.CreateAnswer(createanswerdto);
+  }
+
+  @Post('/api/answer/update/:id')
+  updateAnswer (@Param('id', new ParseIntPipe()) id, @Body() updateanswerdto: UpdateAnswerDto): Promise<Answer> {
+    return this.answerService.UpdateAnswer(id, updateanswerdto);
+  }
+
+  @Post('/api/answer/increment/:id')
+  incrementCounter(@Param('id', new ParseIntPipe()) id): Promise<Answer> {
+    return this.answerService.IncrementMark(id);
+  }
+
+  @Delete('/api/answer/delete/:id')
+  deleteAnswer(@Param('id', new ParseIntPipe()) id): Promise<void> {
+    return this.answerService.DeleteAnswer(id);
+  }
+  //End of answer endpoints
 
 }

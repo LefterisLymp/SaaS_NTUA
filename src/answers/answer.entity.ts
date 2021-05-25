@@ -19,9 +19,6 @@ export class Answer {
     @Column({name: 'Mark', default: 0})
     mark: number;
 
-    @Column({name: 'Keywords'})
-    keywords: string;
-
     @Column({name: 'AnsweredOn'})
     answered_on: Date;
 
