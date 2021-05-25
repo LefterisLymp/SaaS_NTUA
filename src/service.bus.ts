@@ -32,4 +32,5 @@ export class ServiceBus {
   deleteQuestion(@Param('id', new ParseIntPipe()) id): Promise<void> {
     return this.questionService.DeleteQuestion(id)
   }
+
 }

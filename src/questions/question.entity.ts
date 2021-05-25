@@ -20,7 +20,5 @@ export class Question {
   @OneToMany(type => Answer, answer => answer.question_id)
   answers: Answer[];
 
-  @OneToMany(type => Keyword_Finder, Keyword_Finder => Keyword_Finder.question_id)
-  @JoinColumn()
   keywords: string[];
 }
