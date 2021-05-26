@@ -9,6 +9,8 @@ import {QuestionService} from "./services/create_question_service";
 import {Keyword_Finder} from "./keyword_finder/keyword_finder.entity";
 import {Keyword} from "./keyword/keyword.entity";
 import {AnswerService} from "./services/create_answer_service";
+import { AuthService } from './services/auth_service';
+import { JwtModule } from "@nestjs/jwt";
 
 @Module({
   imports: [
@@ -22,8 +24,13 @@ import {AnswerService} from "./services/create_answer_service";
       entities: [User, Question, Answer, Keyword_Finder, Keyword],
       synchronize: true,
     }),
+    TypeOrmModule.forFeature([User]),
+    JwtModule.register({
+      secret: 'SeCrEtKeYWOWSuperSecret',
+      signOptions: {expiresIn: '1h'}
+    })
   ],
-  providers: [AppService, QuestionService, AnswerService],
+  providers: [AppService, QuestionService, AnswerService, AuthService],
   controllers: [ServiceBus]
 })
 export class AppModule {}
