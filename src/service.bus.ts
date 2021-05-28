@@ -1,8 +1,18 @@
-import {Controller, Get, Post, Body, Param, ParseIntPipe, Delete} from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  ParseIntPipe,
+  Delete,
+  UnauthorizedException,
+  Req,
+  BadRequestException, Res
+} from '@nestjs/common';
 import {QuestionService} from "./services/create_question_service";
 import {CreateQuestionDto} from "./questions/create.question.dto";
 import {Question} from "./questions/question.entity";
-import {UpdateQuestionDto} from "./questions/update.question.dto";
 import {CreateAnswerDto} from "./answers/create.answer.dto";
 import {Answer} from "./answers/answer.entity";
 import {AnswerService} from "./services/create_answer_service";
@@ -12,7 +22,7 @@ import { UpdateQuestionDto } from './questions/update.question.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from "@nestjs/jwt";
 import { Response, Request } from "express";
-
+import {AuthService} from "./services/auth_service";
 
 @Controller()
 export class ServiceBus {

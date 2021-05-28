@@ -18,7 +18,7 @@ export class User {
   @Column({name: 'Last_name'})
   last_name: string;
 
-  @Column({name: 'Token'})
+  @Column({name: 'Token', default: null})
   token: string;
 
   @Column({name: 'Role'})
