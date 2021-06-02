@@ -161,9 +161,9 @@ export class ServiceBus {
   }
 
   @Get('/api/filter/date')
-  filterByDate(@Body() questions, date): Promise<Question[]> {
+  filterByDate(@Body() questions, from_date, to_date): Promise<Question[]> {
     let questions_array = JSON.parse(questions.toString());
-    return this.searchService.filter_by_keyword(questions_array, date);
+    return this.searchService.filter_by_date(questions_array, from_date, to_date);
   }
 
 }
