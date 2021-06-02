@@ -11,6 +11,7 @@ import {Keyword} from "./keyword/keyword.entity";
 import {AnswerService} from "./services/create_answer_service";
 import { AuthService } from './services/auth_service';
 import { JwtModule } from "@nestjs/jwt";
+import {Search_question_service} from "./services/search_question_service";
 
 @Module({
   imports: [
@@ -30,7 +31,7 @@ import { JwtModule } from "@nestjs/jwt";
       signOptions: {expiresIn: '1h'}
     })
   ],
-  providers: [AppService, QuestionService, AnswerService, AuthService],
+  providers: [AppService, QuestionService, AnswerService, AuthService, Search_question_service],
   controllers: [ServiceBus]
 })
 export class AppModule {}

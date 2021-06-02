@@ -23,12 +23,14 @@ import * as bcrypt from 'bcrypt';
 import { JwtService } from "@nestjs/jwt";
 import { Response, Request } from "express";
 import {AuthService} from "./services/auth_service";
+import {Search_question_service} from "./services/search_question_service";
 
 @Controller()
 export class ServiceBus {
   constructor(private readonly questionService: QuestionService,
               private readonly answerService: AnswerService,
               private readonly authService: AuthService,
+              private searchService: Search_question_service,
               private jwtServise: JwtService) {}
 
   @Post('api/register')
@@ -145,5 +147,23 @@ export class ServiceBus {
     return this.answerService.DeleteAnswer(id);
   }
   //End of answer endpoints
+  //Search endpoints
+  @Get('/api/search')
+  searchByKeyword(@Body() keyword: string): Promise<Question[]> {
+    return this.searchService.search_by_keyword(keyword);
+  }
+
+  @Get('/api/filter/keyword')
+  filterByKeyword(@Body(), questions, keywords): Promise<Question[]> {
+    let questions_array = JSON.parse(questions.toString());
+    let keywords_array = JSON.parse(keywords.toString())
+    return this.searchService.filter_by_keyword(questions_array, keywords_array)
+  }
+
+  @Get('/api/filter/date')
+  filterByDate(@Body(), questions, date): Promise<Question[]> {
+    let questions_array = JSON.parse(questions.toString());
+    return this.searchService.filter_by_keyword(questions_array, date);
+  }
 
 }
