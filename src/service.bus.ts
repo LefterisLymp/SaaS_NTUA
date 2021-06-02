@@ -154,14 +154,14 @@ export class ServiceBus {
   }
 
   @Get('/api/filter/keyword')
-  filterByKeyword(@Body(), questions, keywords): Promise<Question[]> {
+  filterByKeyword(@Body() questions, keywords): Promise<Question[]> {
     let questions_array = JSON.parse(questions.toString());
     let keywords_array = JSON.parse(keywords.toString())
     return this.searchService.filter_by_keyword(questions_array, keywords_array)
   }
 
   @Get('/api/filter/date')
-  filterByDate(@Body(), questions, date): Promise<Question[]> {
+  filterByDate(@Body() questions, date): Promise<Question[]> {
     let questions_array = JSON.parse(questions.toString());
     return this.searchService.filter_by_keyword(questions_array, date);
   }
