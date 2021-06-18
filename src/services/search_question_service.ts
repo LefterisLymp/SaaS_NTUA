@@ -35,10 +35,10 @@ export class Search_question_service{
         return answer
     }
 
-    async search_by_keyword(keyword: string): Promise<Question[]> {
+    async search_by_keyword(keyword_s: string): Promise<Question[]> {
         return this.manager.transaction(async manager => {
-            const questions = await this.manager.find(Keyword_Finder, {keyword: keyword})
-            let answer: Question[]
+            const questions = await this.manager.find(Keyword_Finder, {keyword: keyword_s})
+            let answer = []
             for (let i = 0; i < questions.length; i++) {
                 const qu = await this.manager.findOne(Question, {id: questions[i]["question_id"]});
                 answer.push(qu);

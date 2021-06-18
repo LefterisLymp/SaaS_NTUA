@@ -24,6 +24,7 @@ import { JwtService } from "@nestjs/jwt";
 import { Response, Request } from "express";
 import {AuthService} from "./services/auth_service";
 import {Search_question_service} from "./services/search_question_service";
+import { ClientProxy } from '@nestjs/microservices';
 
 @Controller()
 export class ServiceBus {
@@ -31,7 +32,8 @@ export class ServiceBus {
               private readonly answerService: AnswerService,
               private readonly authService: AuthService,
               private searchService: Search_question_service,
-              private jwtServise: JwtService) {}
+              private jwtServise: JwtService,
+              ) {}
 
   @Post('api/register')
   async register(
@@ -149,8 +151,9 @@ export class ServiceBus {
   //End of answer endpoints
   //Search endpoints
   @Get('/api/search')
-  searchByKeyword(@Body() keyword: string): Promise<Question[]> {
-    return this.searchService.search_by_keyword(keyword);
+  searchByKeyword(@Body() keyword): Promise<Question[]> {
+    let keyw = keyword
+    return this.searchService.search_by_keyword(keyw.keyword);
   }
 
   @Get('/api/filter/keyword')

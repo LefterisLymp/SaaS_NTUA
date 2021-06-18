@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ServiceBus } from './service.bus';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -29,7 +30,23 @@ import {Search_question_service} from "./services/search_question_service";
     JwtModule.register({
       secret: 'SeCrEtKeYWOWSuperSecret',
       signOptions: {expiresIn: '1h'}
-    })
+    }),
+    ClientsModule.register([{
+      name: 'rabbit-mq-module',
+      transport: Transport.RMQ,
+      options: {
+        urls: [
+          'amqps://vatnlvqb:IEY1WBGLm5F6_4QyZOGcYXjOxG2lRpUV@cow.rmq2.cloudamqp.com/vatnlvqb'
+        ],
+        queue: 'rabbit-mq-nest-js',
+        // false = manual acknowledgement; true = automatic acknowledgment
+        noAck: false,
+        // Get one by one
+        prefetchCount: 1,
+        queueOptions: {
+          durable: true,
+        }
+      }}])
   ],
   providers: [AppService, QuestionService, AnswerService, AuthService, Search_question_service],
   controllers: [ServiceBus]
