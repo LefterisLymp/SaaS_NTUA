@@ -24,7 +24,7 @@ import { JwtService } from "@nestjs/jwt";
 import { Response, Request } from "express";
 import {AuthService} from "./services/auth_service";
 import {Search_question_service} from "./services/search_question_service";
-import { ClientProxy } from '@nestjs/microservices';
+import { ClientProxy, Ctx, MessagePattern, Payload, RmqContext } from '@nestjs/microservices';
 
 @Controller()
 export class ServiceBus {
@@ -35,57 +35,59 @@ export class ServiceBus {
               private jwtServise: JwtService,
               ) {}
 
-  @Post('api/register')
+  @MessagePattern('register')
   async register(
-      @Body('username') username: string,
-      @Body('first_name') first_name: string,
-      @Body('last_name') last_name: string,
-      @Body('hashed_password') hashed_password: string,
-      @Body('role') role: string,
+      @Payload() data: any,
+      @Ctx() context: RmqContext
   ){
-      const hashedPassword = await bcrypt.hash(hashed_password,12);
+    const channel = context.getChannelRef();
+    const originalMessage = context.getMessage();
+    channel.ack(originalMessage)
 
-      const user = await this.authService.create({
-        username,
-        first_name,
-        last_name,
-        hashed_password: hashedPassword,
-        role
-      });
+    const user = await this.authService.create({
+      username: data.username,
+      first_name: data.first_name,
+      last_name: data.last_name,
+      hashed_password: data.hashed_password,
+      role: data.role,
+    });
 
     delete user.hashed_password;
     return user;
   }
 
-  @Post('api/login')
+  @MessagePattern('login')
   async login(
-    @Body('username') username: string,
-    @Body('password') password: string,
-    @Res({passthrough: true}) response: Response
-  ){
-    const user = await this.authService.findOne({username})
+      @Payload() data: any,
+      @Ctx() context: RmqContext){
+    const channel = context.getChannelRef();
+    const originalMessage = context.getMessage();
+    channel.ack(originalMessage)
+
+    const user = await this.authService.findOne({username: data.username})
     if (!user) {
       throw new BadRequestException('Invalid username or password');
     }
-    if(!await bcrypt.compare(password, user.hashed_password)){
+    if(!await bcrypt.compare(data.password, user.hashed_password)){
       throw new BadRequestException('Invalid username or password');
     }
     const jwt = await this.jwtServise.signAsync({id: user.id});
-    response.cookie('jwt',jwt,{httpOnly: true});
-    return {
-      message: 'Successful login'
-    };
+    return jwt;
   }
 
-  @Get('/api/user')
-  async user(@Req() request: Request){
+  @MessagePattern('user')
+  async user(@Payload() data: any,
+             @Ctx() context: RmqContext){
     try{
-      const cookie = request.cookies['jwt'];
-      const data = await this.jwtServise.verifyAsync(cookie);
-      if(!data){
+      const channel = context.getChannelRef();
+      const originalMessage = context.getMessage();
+      channel.ack(originalMessage);
+
+      const datas = await this.jwtServise.verifyAsync(data.cookie);
+      if(!datas){
         throw new UnauthorizedException();
       }
-      const user = await this.authService.findOne({id: data['id']});
+      const user = await this.authService.findOne({id: datas['id']});
       const {hashed_password, ...result} = user;
       return result;
     }
@@ -94,12 +96,15 @@ export class ServiceBus {
     }
   }
 
-  @Post('api/logout')
-  async logout(@Res({passthrough: true}) response: Response){
-    response.clearCookie('jwt');
-    return {
-      message: 'You have loged out'
-    }
+  @MessagePattern('logout')
+  async logout(@Payload() data: any,
+               @Ctx() context: RmqContext)
+  {
+    const channel = context.getChannelRef();
+    const originalMessage = context.getMessage();
+    channel.ack(originalMessage)
+
+    return {message: 'You have logged out'}
   }
   
   @Get()
@@ -107,66 +112,108 @@ export class ServiceBus {
     return this.questionService.getHello();
   }
   //Question endpoints
-  @Post('/api/question/create')
-  createQuestion(@Body() createquestiondto: CreateQuestionDto) {
-    return this.questionService.CreateQuestion(createquestiondto);
+  @MessagePattern('create-question')
+  createQuestion(@Payload() data: any,
+                 @Ctx() context: RmqContext) {
+    const channel = context.getChannelRef();
+    const originalMessage = context.getMessage();
+    channel.ack(originalMessage)
+    return this.questionService.CreateQuestion(data.create_question_dto);
   }
 
-  @Get('/api/question/view/:id')
-  viewQuestion(@Param('id', new ParseIntPipe()) id): Promise<Question> {
-    return this.questionService.View_by_id(id);
+  @MessagePattern('view-question')
+  //@Get('/api/question/view/:id')
+  viewQuestion(@Payload() data: any,
+               @Ctx() context: RmqContext): Promise<Question> {
+    const channel = context.getChannelRef();
+    const originalMessage = context.getMessage();
+    channel.ack(originalMessage)
+    return this.questionService.View_by_id(data.id);
   }
 
-  @Post('/api/question/update/:id')
-  updateQuestion(@Param('id', new ParseIntPipe()) id, @Body() updatequestiondto: UpdateQuestionDto): Promise<Question> {
-    return this.questionService.UpdateQuestion(id, updatequestiondto)
+  @MessagePattern('update-question')
+  updateQuestion(@Payload() data: any,
+                 @Ctx() context: RmqContext) {
+    const channel = context.getChannelRef();
+    const originalMessage = context.getMessage();
+    channel.ack(originalMessage)
+    return this.questionService.UpdateQuestion(data.id, data.update_question_dto)
   }
 
-  @Delete('/api/question/delete/:id')
-  deleteQuestion(@Param('id', new ParseIntPipe()) id): Promise<void> {
-    return this.questionService.DeleteQuestion(id)
+  @MessagePattern('delete-question')
+  deleteQuestion(@Payload() data: any,
+                 @Ctx() context: RmqContext) {
+    const channel = context.getChannelRef();
+    const originalMessage = context.getMessage();
+    channel.ack(originalMessage)
+    return this.questionService.DeleteQuestion(data.id)
   }
   //End of question endpoints
 
   //Answer endpoints
-  @Post('/api/answer/create')
-  createAnswer (@Body() createanswerdto: CreateAnswerDto): Promise<Answer> {
-    return this.answerService.CreateAnswer(createanswerdto);
+  @MessagePattern('create-answer')
+  createAnswer (@Payload() data: any,
+                @Ctx() context: RmqContext) {
+    const channel = context.getChannelRef();
+    const originalMessage = context.getMessage();
+    channel.ack(originalMessage)
+    return this.answerService.CreateAnswer(data.create_answer_dto);
   }
 
-  @Post('/api/answer/update/:id')
-  updateAnswer (@Param('id', new ParseIntPipe()) id, @Body() updateanswerdto: UpdateAnswerDto): Promise<Answer> {
-    return this.answerService.UpdateAnswer(id, updateanswerdto);
+  @MessagePattern('update-answer')
+  updateAnswer (@Payload() data: any,
+                @Ctx() context: RmqContext) {
+    const channel = context.getChannelRef();
+    const originalMessage = context.getMessage();
+    channel.ack(originalMessage)
+    return this.answerService.UpdateAnswer(data.id, data.update_answer_dto);
   }
 
-  @Post('/api/answer/increment/:id')
-  incrementCounter(@Param('id', new ParseIntPipe()) id): Promise<Answer> {
-    return this.answerService.IncrementMark(id);
+  @MessagePattern('increment-counter')
+  incrementCounter(@Payload() data: any,
+                   @Ctx() context: RmqContext): Promise<Answer> {
+    const channel = context.getChannelRef();
+    const originalMessage = context.getMessage();
+    channel.ack(originalMessage)
+    return this.answerService.IncrementMark(data.id);
   }
 
-  @Delete('/api/answer/delete/:id')
-  deleteAnswer(@Param('id', new ParseIntPipe()) id): Promise<void> {
-    return this.answerService.DeleteAnswer(id);
+  @MessagePattern('delete-answer')
+  deleteAnswer(@Payload() data: any,
+               @Ctx() context: RmqContext): Promise<void> {
+    const channel = context.getChannelRef();
+    const originalMessage = context.getMessage();
+    channel.ack(originalMessage)
+    return this.answerService.DeleteAnswer(data.id);
   }
   //End of answer endpoints
   //Search endpoints
-  @Get('/api/search')
-  searchByKeyword(@Body() keyword): Promise<Question[]> {
-    let keyw = keyword
+  @MessagePattern('search-by-keyword')
+  searchByKeyword(@Payload() data: any,
+                  @Ctx() context: RmqContext): Promise<Question[]> {
+    const channel = context.getChannelRef();
+    const originalMessage = context.getMessage();
+    channel.ack(originalMessage)
+    let keyw = data.keyword
     return this.searchService.search_by_keyword(keyw.keyword);
   }
 
-  @Get('/api/filter/keyword')
-  filterByKeyword(@Body() questions, keywords): Promise<Question[]> {
-    let questions_array = JSON.parse(questions.toString());
-    let keywords_array = JSON.parse(keywords.toString())
-    return this.searchService.filter_by_keyword(questions_array, keywords_array)
+  @MessagePattern('filter-by-keyword')
+  filterByKeyword(@Payload() data: any,
+                  @Ctx() context: RmqContext): Promise<Question[]> {
+    const channel = context.getChannelRef();
+    const originalMessage = context.getMessage();
+    channel.ack(originalMessage)
+    return this.searchService.filter_by_keyword(data.questions_array, data.keywords_array)
   }
 
-  @Get('/api/filter/date')
-  filterByDate(@Body() questions, from_date, to_date): Promise<Question[]> {
-    let questions_array = JSON.parse(questions.toString());
-    return this.searchService.filter_by_date(questions_array, from_date, to_date);
+  @Get('filter-by-date')
+  filterByDate(@Payload() data: any,
+               @Ctx() context: RmqContext): Promise<Question[]> {
+    const channel = context.getChannelRef();
+    const originalMessage = context.getMessage();
+    channel.ack(originalMessage)
+    return this.searchService.filter_by_date(data.questions_array, data.from_date, data.to_date);
   }
 
 }
