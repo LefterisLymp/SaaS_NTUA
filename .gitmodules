@@ -1,0 +1,3 @@
+[submodule "auth-microservice"]
+	path = auth-microservice
+	url = ./auth-microservice
