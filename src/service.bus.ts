@@ -207,7 +207,7 @@ export class ServiceBus {
     return this.searchService.filter_by_keyword(data.questions_array, data.keywords_array)
   }
 
-  @Get('filter-by-date')
+  @MessagePattern('filter-by-date')
   filterByDate(@Payload() data: any,
                @Ctx() context: RmqContext): Promise<Question[]> {
     const channel = context.getChannelRef();
