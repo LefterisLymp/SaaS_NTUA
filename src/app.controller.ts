@@ -7,7 +7,7 @@ import {
   Ctx,
   MessagePattern,
   Payload,
-  RmqContext,
+  RedisContext,
 } from '@nestjs/microservices';
 import { UnauthorizedException, BadRequestException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
@@ -15,21 +15,12 @@ import * as bcrypt from 'bcrypt';
 @Controller()
 export class AppController {
   constructor(
-    private readonly appService: AppService,
     private readonly authService: AuthService,
     private readonly jwtServise: JwtService,
   ) {}
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
-  }
-
   @MessagePattern('register')
-  async register(@Payload() data: any, @Ctx() context: RmqContext) {
-    const channel = context.getChannelRef();
-    const originalMessage = context.getMessage();
-    channel.ack(originalMessage);
+  async register(@Payload() data: any, @Ctx() context: RedisContext) {
 
     const user = await this.authService.create({
       username: data.username,
@@ -44,10 +35,7 @@ export class AppController {
   }
 
   @MessagePattern('login')
-  async login(@Payload() data: any, @Ctx() context: RmqContext) {
-    const channel = context.getChannelRef();
-    const originalMessage = context.getMessage();
-    channel.ack(originalMessage);
+  async login(@Payload() data: any, @Ctx() context: RedisContext) {
 
     const user = await this.authService.findOne({ username: data.username });
     if (!user) {
@@ -61,11 +49,8 @@ export class AppController {
   }
 
   @MessagePattern('user')
-  async user(@Payload() data: any, @Ctx() context: RmqContext) {
+  async user(@Payload() data: any, @Ctx() context: RedisContext) {
     try {
-      const channel = context.getChannelRef();
-      const originalMessage = context.getMessage();
-      channel.ack(originalMessage);
 
       const datas = await this.jwtServise.verifyAsync(data.cookie);
       if (!datas) {
@@ -80,11 +65,7 @@ export class AppController {
   }
 
   @MessagePattern('logout')
-  async logout(@Payload() data: any, @Ctx() context: RmqContext) {
-    const channel = context.getChannelRef();
-    const originalMessage = context.getMessage();
-    channel.ack(originalMessage);
-
+  async logout(@Payload() data: any, @Ctx() context: RedisContext) {
     return { message: 'You have logged out' };
   }
 }
