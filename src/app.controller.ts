@@ -6,7 +6,7 @@ import {
   Ctx,
   MessagePattern,
   Payload,
-  RmqContext,
+  RedisContext,
 } from '@nestjs/microservices';
 import { Answer } from './answers/answer.entity';
 
@@ -15,40 +15,28 @@ export class AppController {
   constructor(private readonly answerService: AnswerService) {}
 
   @MessagePattern('create-answer')
-  createAnswer(@Payload() data: any, @Ctx() context: RmqContext) {
-    const channel = context.getChannelRef();
-    const originalMessage = context.getMessage();
-    channel.ack(originalMessage);
+  createAnswer(@Payload() data: any, @Ctx() context: RedisContext) {
     return this.answerService.CreateAnswer(data.create_answer_dto);
   }
 
   @MessagePattern('update-answer')
-  updateAnswer(@Payload() data: any, @Ctx() context: RmqContext) {
-    const channel = context.getChannelRef();
-    const originalMessage = context.getMessage();
-    channel.ack(originalMessage);
+  updateAnswer(@Payload() data: any, @Ctx() context: RedisContext) {
     return this.answerService.UpdateAnswer(data.id, data.update_answer_dto);
   }
 
   @MessagePattern('increment-counter')
   incrementCounter(
     @Payload() data: any,
-    @Ctx() context: RmqContext,
+    @Ctx() context: RedisContext,
   ): Promise<Answer> {
-    const channel = context.getChannelRef();
-    const originalMessage = context.getMessage();
-    channel.ack(originalMessage);
     return this.answerService.IncrementMark(data.id);
   }
 
   @MessagePattern('delete-answer')
   deleteAnswer(
     @Payload() data: any,
-    @Ctx() context: RmqContext,
+    @Ctx() context: RedisContext,
   ): Promise<void> {
-    const channel = context.getChannelRef();
-    const originalMessage = context.getMessage();
-    channel.ack(originalMessage);
     return this.answerService.DeleteAnswer(data.id);
   }
 }
