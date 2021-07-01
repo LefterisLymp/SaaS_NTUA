@@ -11,6 +11,9 @@ export class Question {
   @Column({name: 'UsersID'})
   user_id: number;
 
+  @Column({name: 'title', default: 'Untitled'})
+  title: string;
+
   @Column({name: 'Question_Text'})
   question_text: string;
 
