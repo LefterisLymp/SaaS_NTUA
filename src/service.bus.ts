@@ -148,7 +148,15 @@ export class ServiceBus {
     channel.ack(originalMessage)
     return this.questionService.DeleteQuestion(data.id)
   }
-  //End of question endpoints
+
+  @MessagePattern('question-all')
+  getallQuest(@Payload() data: any,
+              @Ctx() context: RmqContext) {
+    const channel = context.getChannelRef();
+    const originalMessage = context.getMessage();
+    channel.ack(originalMessage)
+    return this.questionService.getAll()
+  }  //End of question endpoints
 
   //Answer endpoints
   @MessagePattern('create-answer')
