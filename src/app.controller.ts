@@ -105,6 +105,11 @@ export class AppController {
     });
   }
 
+  @Get('api/question/all')
+  async getAllQuestions() {
+    return this.rabbitMQService.send('question-all', {});
+  }
+
   //End of question endpoints
 
   //Answer endpoints
