@@ -148,4 +148,8 @@ export class QuestionService {
       return question;
     });
   }
+
+  async getAll() {
+    return this.manager.find(Question);
+  }
 }

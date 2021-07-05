@@ -42,4 +42,9 @@ export class AppController {
   deleteQuestion(@Payload() data: any, @Ctx() context: RedisContext) {
     return this.questionService.DeleteQuestion(data.id);
   }
+
+  @MessagePattern('question-all')
+  getallQuest(@Payload() data: any, @Ctx() context: RedisContext) {
+    return this.questionService.getAll();
+  }
 }
