@@ -25,6 +25,7 @@ import {Search_question_service} from "./services/search_question_service";
       database: 'saas',
       entities: [User, Question, Answer, Keyword_Finder, Keyword],
       synchronize: true,
+      cache: true
     }),
     TypeOrmModule.forFeature([User]),
     JwtModule.register({

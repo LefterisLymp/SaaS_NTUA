@@ -224,4 +224,21 @@ export class ServiceBus {
     return this.searchService.filter_by_date(data.questions_array, data.from_date, data.to_date);
   }
 
+  @MessagePattern('q&a-by-id')
+  QAbyid(@Payload() data: any,
+         @Ctx() context: RmqContext) {
+    const channel = context.getChannelRef();
+    const originalMessage = context.getMessage();
+    channel.ack(originalMessage);
+    return this.searchService.QAperUserid(data.id);
+  }
+
+  @MessagePattern('q&a-by-day')
+  QAbyday(@Payload() data: any,
+          @Ctx() context: RmqContext) {
+    const channel = context.getChannelRef();
+    const originalMessage = context.getMessage();
+    channel.ack(originalMessage)
+    return this.searchService.QAperDay();
+  }
 }

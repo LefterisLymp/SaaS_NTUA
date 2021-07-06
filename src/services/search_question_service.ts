@@ -3,6 +3,7 @@ import {EntityManager} from 'typeorm'
 import { InjectEntityManager } from '@nestjs/typeorm'
 import {Keyword_Finder} from "../keyword_finder/keyword_finder.entity";
 import {Keyword} from "../keyword/keyword.entity";
+import {Answer} from "../answers/answer.entity";
 
 export class Search_question_service{
 
@@ -56,6 +57,73 @@ export class Search_question_service{
                 answer.push([keywords[i]["keyword"],count.length]);
             }
             return answer})
-    }    
+    }
+
+    async QAperUserid(id: number) {
+        const questions = await this.manager.find(Question, {user_id: id});
+        const answers = await this.manager.find(Answer, {user_id: id});
+        let data = {};
+        data["questions"] = questions;
+        data["answers"] = answers;
+        return data;
+    }
+
+    async QAperDay() {
+        const questions = await this.manager.find(Question);
+        const answers = await this.manager.find(Answer);
+        let q_map = new Map<string, number>();
+        let a_map = new Map<string, number>();
+
+        let question_dates = new Array<string>()
+        let question_nums = new Array<number>()
+        let answer_dates = new Array<string>()
+        let answer_nums = new Array<number>()
+        for(var i = 0; i < questions.length; i++) {
+            let date = questions[i].asked_on;
+            let date_s = date.getUTCFullYear().toString() + "-" + (date.getUTCMonth() + 1).toString() + "-" + date.getUTCDate().toString()
+            if (q_map.has(date_s)) {
+                q_map.set(date_s, q_map.get(date_s) + 1)
+            } else {
+                q_map.set(date_s, 1);
+            }
+        }
+
+
+        for (var i = 0; i < answers.length; i++) {
+            let date = answers[i].answered_on;
+            let date_s = date.getUTCFullYear().toString() + "-" + (date.getUTCMonth()+1).toString() + "-" +  date.getUTCDate().toString()
+            if (a_map.has(date_s)) {
+                a_map.set(date_s, a_map.get(date_s) + 1)
+            } else {
+                a_map.set(date_s, 1);
+            }
+        }
+
+
+        question_dates = Array.from(q_map.keys())
+        question_nums = Array.from(q_map.values())
+
+        answer_dates = Array.from(a_map.keys())
+        answer_nums =  Array.from(a_map.values())
+
+        return {
+            questions: {
+                data: question_dates,
+                label: '# of questions',
+                labels: question_nums,
+                backgroundColor:  'blue',
+                borderColor: 'red',
+                borderWidth: 1
+            },
+            answers: {
+                data: answer_dates,
+                labels: answer_nums,
+                label: '# of answers',
+                backgroundColor: 'orange',
+                borderColor: 'red',
+            }
+        }
+    }
+
 
 }
