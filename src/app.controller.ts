@@ -56,8 +56,8 @@ export class AppController {
     } catch (err) {
       return { exception: err };
     }
-    response.cookie('jwt', jwt, { httpOnly: true });
-    return { message: 'Successfully logged in.' };
+    response.cookie('jwt', jwt.jwt, { httpOnly: true });
+    return { username: jwt.username, id: jwt.id };
   }
 
   @Get('/api/user')
