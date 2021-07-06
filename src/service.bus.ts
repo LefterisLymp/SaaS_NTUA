@@ -72,7 +72,7 @@ export class ServiceBus {
       throw new BadRequestException('Invalid username or password');
     }
     const jwt = await this.jwtServise.signAsync({id: user.id});
-    return jwt;
+    return {username: user.username, id: user.id, jwt: jwt};
   }
 
   @MessagePattern('user')
