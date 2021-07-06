@@ -14,7 +14,8 @@ export class AppController {
   constructor(
     private readonly appService: AppService,
     private readonly rabbitMQService: RabbitMQService,
-  ) {}
+  ) {
+  }
 
   @Get()
   getHello(): string {
@@ -185,5 +186,17 @@ export class AppController {
       from_date: from_date,
       to_date: to_date,
     });
+  }
+
+  @Get('api/search/user_id/:id')
+  async q_a_byid(@Param('id', new ParseIntPipe()) id) {
+    return this.rabbitMQService.send('q&a-by-id', {
+      id: id,
+    });
+  }
+
+  @Get('api/search/day')
+  async q_a_byday() {
+    return this.rabbitMQService.send('q&a-by-day', {});
   }
 }
