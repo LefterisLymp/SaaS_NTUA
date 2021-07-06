@@ -108,19 +108,24 @@ export class Search_question_service{
 
         return {
             questions: {
-                data: question_dates,
-                label: '# of questions',
-                labels: question_nums,
-                backgroundColor:  'blue',
-                borderColor: 'red',
-                borderWidth: 1
+                labels: question_dates,
+                datasets: [{
+                    label: '# of questions',
+                    data: question_nums,
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
             },
             answers: {
-                data: answer_dates,
-                labels: answer_nums,
-                label: '# of answers',
-                backgroundColor: 'orange',
-                borderColor: 'red',
+                labels: answer_dates,
+                datasets: [{
+                    label: '# of answers',
+                    data: answer_nums,
+                    backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                    borderColor: 'rgba(255, 159, 64, 1)',
+                    borderWidth: 1
+                }]
             }
         }
     }
