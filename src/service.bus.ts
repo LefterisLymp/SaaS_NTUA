@@ -241,4 +241,22 @@ export class ServiceBus {
     channel.ack(originalMessage)
     return this.searchService.QAperDay();
   }
+
+  @MessagePattern('questions_per_keyword')
+  Questionsperkeyword(@Payload() data: any,
+          @Ctx() context: RmqContext) {
+    const channel = context.getChannelRef();
+    const originalMessage = context.getMessage();
+    channel.ack(originalMessage)
+    return this.searchService.questions_keyword();
+  }
+
+  @MessagePattern('postings-per-day')
+  PostingsPerDay(@Payload() data: any,
+                      @Ctx() context: RmqContext) {
+    const channel = context.getChannelRef();
+    const originalMessage = context.getMessage();
+    channel.ack(originalMessage)
+    return this.searchService.postings_per_day(data.id);
+  }
 }

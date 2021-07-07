@@ -62,6 +62,11 @@ export class Search_question_service{
     async QAperUserid(id: number) {
         const questions = await this.manager.find(Question, {user_id: id});
         const answers = await this.manager.find(Answer, {user_id: id});
+        for (var i = 0; i < answers.length; i++) {
+            const q_id = answers[i]["question_id"];
+            const question = await this.manager.findOne(Question, {id: q_id})
+            answers[i]["question_title"] = question["title"];
+        }
         let data = {};
         data["questions"] = questions;
         data["answers"] = answers;
@@ -127,6 +132,62 @@ export class Search_question_service{
                     borderWidth: 1
                 }]
             }
+        }
+    }
+
+    async questions_keyword() {
+        const keyw_find = await this.manager.find(Keyword_Finder);
+        let k_map = new Map<string, number>();
+        for(var i = 0; i < keyw_find.length; i++) {
+            let keyword = keyw_find[i].keyword;
+            if (k_map.has(keyword)) {
+                k_map.set(keyword, k_map.get(keyword) + 1)
+            } else {
+                k_map.set(keyword, 1);
+            }
+        }
+        let questions = Array.from(k_map.values())
+        let keywords = Array.from(k_map.keys())
+        return {
+            keywords: keywords,
+            questions: questions
+        }
+    }
+
+    async postings_per_day(id: number) {
+        const questions = await this.manager.find(Question, {user_id: id});
+        const answers = await this.manager.find(Answer, {user_id: id});
+        let p_map = new Map<string, number>();
+
+        for(var i = 0; i < questions.length; i++) {
+            let date = questions[i].asked_on;
+            let date_s = date.getUTCFullYear().toString() + "-" + (date.getUTCMonth() + 1).toString() + "-" + date.getUTCDate().toString()
+            if (p_map.has(date_s)) {
+                p_map.set(date_s, p_map.get(date_s) + 1)
+            } else {
+                p_map.set(date_s, 1);
+            }
+        }
+
+
+        for (var i = 0; i < answers.length; i++) {
+            let date = answers[i].answered_on;
+            let date_s = date.getUTCFullYear().toString() + "-" + (date.getUTCMonth()+1).toString() + "-" +  date.getUTCDate().toString()
+            if (p_map.has(date_s)) {
+                p_map.set(date_s, p_map.get(date_s) + 1)
+            } else {
+                p_map.set(date_s, 1);
+            }
+        }
+
+
+        let posting_dates = Array.from(p_map.keys())
+        let posting_nums = Array.from(p_map.values())
+
+
+        return {
+            dates: posting_dates,
+            nums: posting_nums
         }
     }
 
