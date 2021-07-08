@@ -48,6 +48,20 @@ export class Search_question_service{
         })
     }
 
+    async search_by_date(from_date: Date, to_date: Date): Promise<Question[]> {
+        return this.manager.transaction(async manager => {
+            const questions = await this.manager.find(Question)
+            let answer = []
+            for (let i = 0; i < questions.length; i++) {
+                if (questions[i]["asked_on"] >= from_date && questions[i]["asked_on"] <= to_date) {
+                    answer.push(questions[i])
+                }
+            }
+            return answer;
+        })
+
+    }
+
 
     async questions_per_keyword(keywords: Keyword[]) {
         return this.manager.transaction(async manager => {
