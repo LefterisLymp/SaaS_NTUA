@@ -163,13 +163,12 @@ export class AppController {
   @Get('/api/filter/keyword')
   async filterByKeyword(
     @Body('questions') questions,
-    @Body('keywords') keywords,
+    @Body('keyword') keyword: string,
   ) {
     const questions_array = JSON.parse(questions.toString());
-    const keywords_array = JSON.parse(keywords.toString());
     return this.rabbitMQService.send('filter-by-keyword', {
       questions_array: questions_array,
-      keywords_array: keywords_array,
+      keywords_array: keyword,
     });
   }
 
