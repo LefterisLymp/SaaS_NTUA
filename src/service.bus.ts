@@ -202,8 +202,7 @@ export class ServiceBus {
     const channel = context.getChannelRef();
     const originalMessage = context.getMessage();
     channel.ack(originalMessage)
-    let keyw = data.keyword
-    return this.searchService.search_by_keyword(keyw.keyword);
+    return this.searchService.search_by_keyword(data.keyword);
   }
 
   @MessagePattern('filter-by-keyword')
@@ -212,7 +211,7 @@ export class ServiceBus {
     const channel = context.getChannelRef();
     const originalMessage = context.getMessage();
     channel.ack(originalMessage)
-    return this.searchService.filter_by_keyword(data.questions_array, data.keywords_array)
+    return this.searchService.filter_by_keyword(data.questions_array, data.keyword)
   }
 
   @MessagePattern('filter-by-date')
