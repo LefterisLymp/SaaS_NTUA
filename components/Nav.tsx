@@ -21,7 +21,7 @@ const Nav = (props: { username: string, setUsername: (username: string) => void 
                     <Link to="/login" className="nav-link">Login</Link>
                 </li>
                 <li className="nav-item active">
-                    <Link to="/register" className="nav-link">Register</Link>
+                    <Link to="/register" className="nav-link">Sign Up</Link>
                 </li>
             </ul>
         )
@@ -39,7 +39,6 @@ const Nav = (props: { username: string, setUsername: (username: string) => void 
         <nav className="navbar navbar-expand-md navbar-dark bg-dark mb-4">
             <div className="container-fluid">
                 <Link to="/" className="navbar-brand">Home</Link>
-
                 <div>
                     {menu}
                 </div>
