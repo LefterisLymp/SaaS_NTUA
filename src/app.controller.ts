@@ -172,15 +172,12 @@ export class AppController {
     });
   }
 
-  @Get('/api/filter/date')
+  @Get('/api/search/date')
   async filterByDate(
-    @Body('questions') questions,
     @Body('from_date') from_date,
     @Body('to_date') to_date,
   ) {
-    const questions_array = JSON.parse(questions.toString());
     return this.rabbitMQService.send('filter-by-date', {
-      questions_array: questions_array,
       from_date: from_date,
       to_date: to_date,
     });
