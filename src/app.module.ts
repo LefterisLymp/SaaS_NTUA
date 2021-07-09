@@ -18,11 +18,7 @@ import {Search_question_service} from "./services/search_question_service";
   imports: [
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'root',
-      password: 'Ro0t_KlM1!',
-      database: 'saas',
+      url: 'mysql://b40e3a905198a6:2fcfd8be@us-cdbr-east-04.cleardb.com/heroku_29acbb2f2749f8a?reconnect=true',
       entities: [User, Question, Answer, Keyword_Finder, Keyword],
       synchronize: true,
       cache: true
