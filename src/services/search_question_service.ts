@@ -48,12 +48,14 @@ export class Search_question_service{
         })
     }
 
-    async search_by_date(from_date: Date, to_date: Date): Promise<Question[]> {
+    async search_by_date(from_date: string, to_date: string): Promise<Question[]> {
         return this.manager.transaction(async manager => {
+            const fr = new Date(from_date.replace("/", "-"));
+            const to = new Date(to_date.replace("/", "-"));
             const questions = await this.manager.find(Question)
             let answer = []
             for (let i = 0; i < questions.length; i++) {
-                if (questions[i]["asked_on"] >= from_date && questions[i]["asked_on"] <= to_date) {
+                if (questions[i]["asked_on"] >= fr && questions[i]["asked_on"] <= to) {
                     answer.push(questions[i])
                 }
             }
