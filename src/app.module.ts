@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ServiceBus } from './service.bus';
 import { AppService } from './app.service';
-import { TypeOrmModule } from 'typeorm';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users/user.entity';
 import { Question } from './questions/question.entity';
 import { Answer } from './answers/answer.entity';

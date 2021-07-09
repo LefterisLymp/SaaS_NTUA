@@ -1,13 +1,13 @@
 import {Question} from '../questions/question.entity'
 import {Answer} from '../answers/answer.entity'
 import {EntityManager} from 'typeorm'
-import { InjectEntityManager } from 'typeorm'
+//import { InjectEntityManager } from '@nestjs/typeorm'
 import {CreateAnswerDto} from "../answers/create.answer.dto";
 import {UpdateAnswerDto} from "../answers/update.answer.dto";
 import {BadRequestException, NotFoundException} from "@nestjs/common";
 
 export class AnswerService {
-    constructor(@InjectEntityManager() private manager: EntityManager) {}
+    constructor(private manager: EntityManager) {}
 
     async CreateAnswer (create_answer_dto: CreateAnswerDto): Promise<Answer> {
         return this.manager.transaction( async manager => {
