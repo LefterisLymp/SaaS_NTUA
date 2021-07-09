@@ -153,7 +153,7 @@ export class AppController {
 
   //End of answer endpoints
   //Search endpoints
-  @Get('/api/search')
+  @Post('/api/search')
   async searchByKeyword(@Body('keyword') keyword: string) {
     return this.rabbitMQService.send('search-by-keyword', {
       keyword: keyword,
@@ -172,7 +172,7 @@ export class AppController {
     });
   }
 
-  @Get('/api/search/date')
+  @Post('/api/search/date')
   async filterByDate(
     @Body('from_date') from_date,
     @Body('to_date') to_date,
