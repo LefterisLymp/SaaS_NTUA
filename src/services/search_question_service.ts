@@ -1,6 +1,6 @@
 import {Question} from '../questions/question.entity'
 import {EntityManager} from 'typeorm'
-import { InjectEntityManager } from '@nestjs/typeorm'
+import { InjectEntityManager } from 'typeorm'
 import {Keyword_Finder} from "../keyword_finder/keyword_finder.entity";
 import {Keyword} from "../keyword/keyword.entity";
 import {Answer} from "../answers/answer.entity";

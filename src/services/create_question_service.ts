@@ -1,7 +1,7 @@
 import {Question} from '../questions/question.entity'
 import {Keyword} from '../keyword/keyword.entity'
 import {EntityManager} from 'typeorm'
-import { InjectEntityManager } from '@nestjs/typeorm'
+import { InjectEntityManager } from 'typeorm'
 import {CreateQuestionDto} from "../questions/create.question.dto";
 import {UpdateQuestionDto} from "../questions/update.question.dto";
 import {NotFoundException} from "@nestjs/common";

@@ -1,7 +1,7 @@
 import {Question} from '../questions/question.entity'
 import {Answer} from '../answers/answer.entity'
 import {EntityManager} from 'typeorm'
-import { InjectEntityManager } from '@nestjs/typeorm'
+import { InjectEntityManager } from 'typeorm'
 import {CreateAnswerDto} from "../answers/create.answer.dto";
 import {UpdateAnswerDto} from "../answers/update.answer.dto";
 import {BadRequestException, NotFoundException} from "@nestjs/common";
