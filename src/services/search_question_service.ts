@@ -1,13 +1,13 @@
 import {Question} from '../questions/question.entity'
 import {EntityManager} from 'typeorm'
-//import { InjectEntityManager } from 'typeorm'
+import { InjectEntityManager } from '@nestjs/typeorm'
 import {Keyword_Finder} from "../keyword_finder/keyword_finder.entity";
 import {Keyword} from "../keyword/keyword.entity";
 import {Answer} from "../answers/answer.entity";
 
 export class Search_question_service{
 
-    constructor(private manager: EntityManager) {}
+    constructor(@InjectEntityManager() private manager: EntityManager) {}
 
     async filter_by_keyword(questions: Question[], keyword:string): Promise<Question[]> {
         return this.manager.transaction(async manager => {

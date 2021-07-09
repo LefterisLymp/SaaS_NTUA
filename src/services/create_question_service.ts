@@ -1,7 +1,7 @@
 import {Question} from '../questions/question.entity'
 import {Keyword} from '../keyword/keyword.entity'
 import {EntityManager} from 'typeorm'
-//import { InjectEntityManager } from 'typeorm'
+import { InjectEntityManager } from '@nestjs/typeorm'
 import {CreateQuestionDto} from "../questions/create.question.dto";
 import {UpdateQuestionDto} from "../questions/update.question.dto";
 import {NotFoundException} from "@nestjs/common";
@@ -9,7 +9,7 @@ import {Keyword_Finder} from "../keyword_finder/keyword_finder.entity";
 import {Answer} from "../answers/answer.entity";
 
 export class QuestionService {
-    constructor(private manager: EntityManager) {}
+    constructor(@InjectEntityManager() private manager: EntityManager) {}
 
     async getHello(): Promise<string> {return "Hello! Questions only."}
 
