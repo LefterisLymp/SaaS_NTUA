@@ -163,8 +163,14 @@ export class Search_question_service{
         let questions = Array.from(k_map.values())
         let keywords = Array.from(k_map.keys())
         return {
-            keywords: keywords,
-            questions: questions
+            labels: keywords,
+            datasets: [{
+                label: '# of questions per keyword',
+                data: questions,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
         }
     }
 
@@ -200,8 +206,14 @@ export class Search_question_service{
 
 
         return {
-            dates: posting_dates,
-            nums: posting_nums
+            labels: posting_dates,
+            datasets: [{
+                label: '# of postings per day',
+                data: posting_nums,
+                backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                borderColor: 'rgba(153, 102, 255, 1)',
+                borderWidth: 1
+            }]
         }
     }
 
