@@ -10,7 +10,7 @@ const Answer = (props: { id: string }) => {
     const [redirect, setRedirect] = useState(false);
 
     const getData=()=>{
-        fetch('api/question/all',{
+        fetch('https://service-bus.herokuapp.com/api/question/all',{
             method: 'GET',
             headers: {'Content-Type': 'application/json'},
             credentials: 'include',
@@ -32,7 +32,7 @@ const Answer = (props: { id: string }) => {
 
       const getAnswer = async (e) => {
         console.log(e);
-        const response = await fetch('api/question/view/'+e,{
+        const response = await fetch('https://service-bus.herokuapp.com/api/question/view/'+e,{
             method: 'GET',
             headers: {'Content-Type': 'application/json'},
             credentials: 'include',
