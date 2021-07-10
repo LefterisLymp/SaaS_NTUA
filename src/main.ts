@@ -17,6 +17,6 @@ async function bootstrap() {
       // Get one by one
       prefetchCount: 1,
     }});
-  await app.listen(() => {console.log("Backend is listening")});
+  await app.listen( () => {console.log("Backend is listening");});
 }
 bootstrap();
