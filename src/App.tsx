@@ -21,7 +21,7 @@ function App() {
     useEffect(() => {
         (
             async () => {
-                const response = await fetch('api/user', {
+                const response = await fetch('https://service-bus.herokuapp.com/api/user', {
                     method: 'GET',
                     headers: {'Content-Type': 'application/json'},
                     credentials: 'include',
