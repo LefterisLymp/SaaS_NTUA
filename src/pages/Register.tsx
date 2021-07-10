@@ -35,24 +35,40 @@ const Register = () => {
         <form onSubmit={submit}>
             <h1 className="h3 mb-3 fw-normal">Please Sign Up</h1>
 
-            <input className="form-control" placeholder="Username" required
+            <div className="form-group">
+            <label >Email address</label>
+            <input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email"
+            required onChange={e => setRole(e.target.value)}
+            />
+            </div>
+
+            <div className="form-group">
+            <label >Username</label>
+            <input type="text" className="form-control" id="exampleInputUsername" placeholder="Username" required
                    onChange={e => setUsername(e.target.value)}
             />
+            </div>
+
+            <div className="form-group">
+            <label >First Name </label>
             <input type="text" className="form-control" placeholder="First Name" required
                    onChange={e => setFirstname(e.target.value)}
             />
+            </div>
 
+            <div className="form-group">
+            <label >Last Name</label>
             <input type="text" className="form-control" placeholder="Last Name" required
                    onChange={e => setLastname(e.target.value)}
-            />  
-
+            /> 
+            </div>
+ 
+            <div className="form-group">
+            <label >Password</label>
             <input type="password" className="form-control" placeholder="Password" required
                    onChange={e => setHashedpassword(e.target.value)}
             />
-
-            <input type="text" className="form-control" placeholder="Role" required
-                   onChange={e => setRole(e.target.value)}
-            />
+            </div>
 
             <button className="w-100 btn btn-lg btn-primary" type="submit">Submit</button>
         </form>

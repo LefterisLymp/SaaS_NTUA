@@ -18,6 +18,9 @@ const Nav = (props: { username: string, setUsername: (username: string) => void 
         menu = (
             <ul className="navbar-nav me-auto mb-2 mb-md-0">
                 <li className="nav-item active">
+                    <Link to="/browse" className="nav-link">Browse Questions</Link>
+                </li>
+                <li className="nav-item active">
                     <Link to="/login" className="nav-link">Login</Link>
                 </li>
                 <li className="nav-item active">
@@ -28,6 +31,9 @@ const Nav = (props: { username: string, setUsername: (username: string) => void 
     } else {
         menu = (
             <ul className="navbar-nav me-auto mb-2 mb-md-0">
+                <li className="nav-item active">
+                    <Link to="/browse" className="nav-link">Browse Questions</Link>
+                </li>
                 <li className="nav-item active">
                     <Link to="/login" className="nav-link" onClick={logout}>Logout</Link>
                 </li>

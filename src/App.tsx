@@ -11,6 +11,7 @@ import ChartPerDay from './pages/ChartPerDay';
 import MyQaA from './pages/MyQaA';
 import ChartPerKeyword from './pages/ChartPerKeyword';
 import ChartPerId from './pages/ChartPerId';
+import Browse from './pages/Browse';
 
 
 function App() {
@@ -48,6 +49,7 @@ function App() {
                     <Route path="/chart" component={ChartPerDay}/>
                     <Route path="/chartk" component={ChartPerKeyword}/>
                     <Route path="/charti" component={ChartPerId}/>
+                    <Route path="/browse" component={Browse}/>
                     <Route path="/qa" exact component={() => <MyQaA id={id}/>}/>
                 </main>
             </BrowserRouter>
