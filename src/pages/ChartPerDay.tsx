@@ -5,7 +5,7 @@ const ChartPerDay = () => {
     const [data,setData] = useState<any>([]);
 
     const getData=()=>{
-        fetch('http://localhost:3006/api/search/day',{
+        fetch('api/search/day',{
             method: 'GET',
             headers: {'Content-Type': 'application/json'},
             credentials: 'include',
