@@ -9,7 +9,7 @@ const ChartPerId = () => {
       useEffect(()=>{
         setIsLoading(true);
         
-            fetch('http://localhost:3006/api/user',{
+            fetch('api/user',{
                 method: 'GET',
                 headers: {'Content-Type': 'application/json'},
                 credentials: 'include',
@@ -22,7 +22,7 @@ const ChartPerId = () => {
                 setUserId(myJson.id)
               });
 
-        fetch('http://localhost:3006/api/search/postings/'+user_id,{
+        fetch('api/search/postings/'+user_id,{
             method: 'GET',
             headers: {'Content-Type': 'application/json'},
             credentials: 'include',
