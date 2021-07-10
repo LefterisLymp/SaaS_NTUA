@@ -52,7 +52,7 @@ const Answer = (props: { id: string }) => {
 
     const submit = async (e: SyntheticEvent) => {
       e.preventDefault();
-      await fetch('api/answer/create', {
+      await fetch('https://service-bus.herokuapp.com/api/answer/create', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({

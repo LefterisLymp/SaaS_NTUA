@@ -5,7 +5,7 @@ const ChartPerDay = () => {
     const [data,setData] = useState<any>([]);
 
     const getData=()=>{
-        fetch('api/search/day',{
+        fetch('https://service-bus.herokuapp.com/api/search/day',{
             method: 'GET',
             headers: {'Content-Type': 'application/json'},
             credentials: 'include',

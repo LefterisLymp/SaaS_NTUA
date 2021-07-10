@@ -10,7 +10,7 @@ const CreateQuestion = (props: { id: string }) => {
 
     const submit = async (e: SyntheticEvent) => {
         e.preventDefault();
-        fetch('api/question/create',{
+        fetch('https://service-bus.herokuapp.com/api/question/create',{
             method: 'POST',
             headers: {
                 'Content-Type':'application/x-www-form-urlencoded',

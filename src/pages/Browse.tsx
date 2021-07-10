@@ -16,7 +16,7 @@ const Browse = () => {
           "from_date": fromDate,
           "to_date": toDate
       }));
-        fetch('api/search/date',{
+        fetch('https://service-bus.herokuapp.com/api/search/date',{
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
           body: JSON.stringify({
@@ -38,7 +38,7 @@ const Browse = () => {
         e.preventDefault();
         setIsLoading(true);
 
-          fetch('api/search',{
+          fetch('https://service-bus.herokuapp.com/api/search',{
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({

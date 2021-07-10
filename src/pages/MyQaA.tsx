@@ -8,7 +8,7 @@ const MyQaA = (props) => {
       useEffect(()=>{
         setIsLoading(true);
         
-            fetch('api/user',{
+            fetch('https://service-bus.herokuapp.com/api/user',{
                 method: 'GET',
                 headers: {'Content-Type': 'application/json'},
                 credentials: 'include',
@@ -21,7 +21,7 @@ const MyQaA = (props) => {
                 setUserId(myJson.id)
               });
 
-        fetch('api/search/user_id/'+user_id,{
+        fetch('https://service-bus.herokuapp.com/api/search/user_id/'+user_id,{
             method: 'GET',
             headers: {'Content-Type': 'application/json'},
             credentials: 'include',
