@@ -1,15 +1,13 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ClientsModule, Transport } from '@nestjs/microservices';
+import {ClientsModule, MicroserviceOptions, Transport} from '@nestjs/microservices';
 import * as cookieParser from "cookie-parser";
 
 async function bootstrap() {
-  //const app = await NestFactory.create(AppModule)
-
   const app = await NestFactory.create(AppModule);
 
 // Then combine it with your microservice
-  const microservice = app.connectMicroservice({
+  const microservice = app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.RMQ,
     options: {
       urls: [
