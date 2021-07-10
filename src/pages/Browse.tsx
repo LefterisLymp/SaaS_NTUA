@@ -16,7 +16,7 @@ const Browse = () => {
           "from_date": fromDate,
           "to_date": toDate
       }));
-        fetch('http://localhost:3006/api/search/date',{
+        fetch('api/search/date',{
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
           body: JSON.stringify({
@@ -38,7 +38,7 @@ const Browse = () => {
         e.preventDefault();
         setIsLoading(true);
 
-          fetch('http://localhost:3006/api/search',{
+          fetch('api/search',{
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
