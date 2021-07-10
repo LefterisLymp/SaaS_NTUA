@@ -35,6 +35,9 @@ export class ServiceBus {
               private jwtServise: JwtService,
               ) {}
 
+  @Get('/')
+  async getgreeting() {return "Hello world!";}
+
   @MessagePattern('register')
   async register(
       @Payload() data: any,
