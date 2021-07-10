@@ -36,22 +36,10 @@ export class Search_question_service{
         return answer
     }
 
-    async search_by_keyword(keyword_s: string): Promise<Question[]> {
-        return this.manager.transaction(async manager => {
-            const questions = await this.manager.find(Keyword_Finder, {keyword: keyword_s})
-            let answer = []
-            for (let i = 0; i < questions.length; i++) {
-                const qu = await this.manager.findOne(Question, {id: questions[i]["question_id"]});
-                answer.push(qu);
-            }
-            return answer;
-        })
-    }
-
     async search_by_date(from_date: string, to_date: string): Promise<Question[]> {
         return this.manager.transaction(async manager => {
-            const fr = new Date(from_date.replace("/", "-"));
-            const to = new Date(to_date.replace("/", "-"));
+            const fr = new Date(from_date.replace("-", "-"));
+            const to = new Date(to_date.replace("-", "-"));
             const questions = await this.manager.find(Question)
             let answer = []
             for (let i = 0; i < questions.length; i++) {
@@ -62,6 +50,18 @@ export class Search_question_service{
             return answer;
         })
 
+    }
+
+    async search_by_keyword(keyword_s: string): Promise<Question[]> {
+        return this.manager.transaction(async manager => {
+            const questions = await this.manager.find(Keyword_Finder, {keyword: keyword_s})
+            let answer = []
+            for (let i = 0; i < questions.length; i++) {
+                const qu = await this.manager.findOne(Question, {id: questions[i]["question_id"]});
+                answer.push(qu);
+            }
+            return answer;
+        })
     }
 
 
@@ -150,7 +150,6 @@ export class Search_question_service{
             }
         }
     }
-
     async questions_keyword() {
         const keyw_find = await this.manager.find(Keyword_Finder);
         let k_map = new Map<string, number>();
@@ -218,6 +217,4 @@ export class Search_question_service{
             }]
         }
     }
-
-
 }

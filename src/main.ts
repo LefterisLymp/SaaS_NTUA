@@ -1,13 +1,11 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import {ClientsModule, MicroserviceOptions, Transport} from '@nestjs/microservices';
+import { ClientsModule, Transport } from '@nestjs/microservices';
 import * as cookieParser from "cookie-parser";
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-
-// Then combine it with your microservice
-  const microservice = app.connectMicroservice<MicroserviceOptions>({
+  //const app = await NestFactory.create(AppModule)
+  const app = await NestFactory.createMicroservice(AppModule, {
     transport: Transport.RMQ,
     options: {
       urls: [
@@ -19,9 +17,6 @@ async function bootstrap() {
       // Get one by one
       prefetchCount: 1,
     }});
-
-  await app.startAllMicroservicesAsync();
-  await app.listen(process.env.PORT || 3001);
-
+  await app.listen(() => {console.log("Backend is listening")});
 }
 bootstrap();

@@ -45,6 +45,10 @@ export class QuestionService {
         })
     }
 
+    async getAll() {
+        return this.manager.find(Question);
+    }
+
     async UpdateQuestion (id: number, update_question_dto: UpdateQuestionDto): Promise<Question> {
         return this.manager.transaction(async manager => {
             let question = await this.manager.findOne(Question, id)
@@ -110,9 +114,5 @@ export class QuestionService {
             question["answers"] = answers;
             return question;
         })
-    }
-
-    async getAll() {
-        return this.manager.find(Question);
     }
 }
