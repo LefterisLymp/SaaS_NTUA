@@ -9,11 +9,6 @@ async function bootstrap() {
     origin: 'https://service-bus.herokuapp.com/',
     credentials: true,
   });
-  
-  app.use(function(req, res, next) {
-   res.header("Access-Control-Allow-Origin", "*");
-   next();
-});
   await app.listen(process.env.PORT || 3000);
 }
 bootstrap();
