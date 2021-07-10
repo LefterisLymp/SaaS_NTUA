@@ -5,12 +5,8 @@ import * as cookieParser from "cookie-parser";
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   await app.use(cookieParser());
-  app.enableCors({
-    origin: 'https://service-bus.herokuapp.com/',
-    credentials: true,
-  });
   
-  app.use(function(req, res, next) {
+  await app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", '*');
   res.header("Access-Control-Allow-Credentials", true);
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
