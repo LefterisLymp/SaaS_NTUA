@@ -8,7 +8,7 @@ const MyQaA = (props) => {
       useEffect(()=>{
         setIsLoading(true);
         
-            fetch('http://localhost:3006/api/user',{
+            fetch('api/user',{
                 method: 'GET',
                 headers: {'Content-Type': 'application/json'},
                 credentials: 'include',
@@ -21,7 +21,7 @@ const MyQaA = (props) => {
                 setUserId(myJson.id)
               });
 
-        fetch('http://localhost:3006/api/search/user_id/'+user_id,{
+        fetch('api/search/user_id/'+user_id,{
             method: 'GET',
             headers: {'Content-Type': 'application/json'},
             credentials: 'include',
