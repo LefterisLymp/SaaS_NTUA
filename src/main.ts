@@ -9,6 +9,11 @@ async function bootstrap() {
 
   app.enableCors({ origin: 'https://frontend-soa.herokuapp.com',
                      credentials: true});
+  app.use( (req, res, next) => {
+  res.header('Access-Control-Allow-Origin', true);
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+  res.header('Access-Control-Allow-Origin', 'Content-Type, Accept');
+  } );
   await app.listen(process.env.PORT || 3000);
 }
 bootstrap();
