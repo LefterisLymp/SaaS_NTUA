@@ -35,6 +35,11 @@ export class QuestionController {
     return this.questionService.View_by_id(id);
   }
 
+  @Get('api/question/all')
+  getAll() {
+    return this.questionService.getAll();
+  }
+
   @Post('/api/question/update/:id')
   updateQuestion(
     @Param('id', new ParseIntPipe()) id,

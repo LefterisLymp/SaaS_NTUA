@@ -110,6 +110,10 @@ export class QuestionService {
     });
   }
 
+  async getAll() {
+    return this.manager.find(Question);
+  }
+
   async DeleteQuestion(id: number): Promise<void> {
     return this.manager.transaction(async (manager) => {
       const question = await this.manager.findOne(Question, id);
