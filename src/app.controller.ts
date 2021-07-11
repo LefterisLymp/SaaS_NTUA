@@ -47,4 +47,28 @@ export class AppController {
       data.to_date,
     );
   }
+
+  @MessagePattern('q&a-by-id')
+  QAbyid(@Payload() data: any,
+         @Ctx() context: RedisContext) {
+    return this.searchService.QAperUserid(data.id);
+  }
+
+  @MessagePattern('q&a-by-day')
+  QAbyday(@Payload() data: any,
+          @Ctx() context: RedisContext) {
+    return this.searchService.QAperDay();
+  }
+
+  @MessagePattern('questions_per_keyword')
+  Questionsperkeyword(@Payload() data: any,
+                      @Ctx() context: RedisContext) {
+    return this.searchService.questions_keyword();
+  }
+
+  @MessagePattern('postings-per-day')
+  PostingsPerDay(@Payload() data: any,
+                 @Ctx() context: RedisContext) {
+    return this.searchService.postings_per_day(data.id);
+  }
 }

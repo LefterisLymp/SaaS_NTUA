@@ -3,6 +3,7 @@ import { EntityManager } from 'typeorm';
 import { InjectEntityManager } from '@nestjs/typeorm';
 import { Keyword_Finder } from './keyword_finder/keyword_finder.entity';
 import { Keyword } from './keyword/keyword.entity';
+import { Answer } from './answers/answer.entity';
 
 export class Search_question_service {
   constructor(@InjectEntityManager() private manager: EntityManager) {}
@@ -59,6 +60,24 @@ export class Search_question_service {
     });
   }
 
+  async search_by_date(
+    from_date: string,
+    to_date: string,
+  ): Promise<Question[]> {
+    return this.manager.transaction(async (manager) => {
+      const fr = new Date(from_date.replace('/', '-'));
+      const to = new Date(to_date.replace('/', '-'));
+      const questions = await this.manager.find(Question);
+      const answer = [];
+      for (let i = 0; i < questions.length; i++) {
+        if (questions[i]['asked_on'] >= fr && questions[i]['asked_on'] <= to) {
+          answer.push(questions[i]);
+        }
+      }
+      return answer;
+    });
+  }
+
   async questions_per_keyword(keywords: Keyword[]) {
     return this.manager.transaction(async (manager) => {
       const answer = [];
@@ -70,5 +89,172 @@ export class Search_question_service {
       }
       return answer;
     });
+  }
+
+  async QAperUserid(id: number) {
+    const questions = await this.manager.find(Question, { user_id: id });
+    const answers = await this.manager.find(Answer, { user_id: id });
+    for (let i = 0; i < answers.length; i++) {
+      const q_id = answers[i]['question_id'];
+      const question = await this.manager.findOne(Question, { id: q_id });
+      answers[i]['question_title'] = question['title'];
+    }
+    const data = {};
+    data['questions'] = questions;
+    data['answers'] = answers;
+    return data;
+  }
+
+  async QAperDay() {
+    const questions = await this.manager.find(Question);
+    const answers = await this.manager.find(Answer);
+    const q_map = new Map<string, number>();
+    const a_map = new Map<string, number>();
+
+    let question_dates = new Array<string>();
+    let question_nums = new Array<number>();
+    let answer_dates = new Array<string>();
+    let answer_nums = new Array<number>();
+    for (var i = 0; i < questions.length; i++) {
+      const date = questions[i].asked_on;
+      const date_s =
+        date.getUTCFullYear().toString() +
+        '-' +
+        (date.getUTCMonth() + 1).toString() +
+        '-' +
+        date.getUTCDate().toString();
+      if (q_map.has(date_s)) {
+        q_map.set(date_s, q_map.get(date_s) + 1);
+      } else {
+        q_map.set(date_s, 1);
+      }
+    }
+
+    for (var i = 0; i < answers.length; i++) {
+      const date = answers[i].answered_on;
+      const date_s =
+        date.getUTCFullYear().toString() +
+        '-' +
+        (date.getUTCMonth() + 1).toString() +
+        '-' +
+        date.getUTCDate().toString();
+      if (a_map.has(date_s)) {
+        a_map.set(date_s, a_map.get(date_s) + 1);
+      } else {
+        a_map.set(date_s, 1);
+      }
+    }
+
+    question_dates = Array.from(q_map.keys());
+    question_nums = Array.from(q_map.values());
+
+    answer_dates = Array.from(a_map.keys());
+    answer_nums = Array.from(a_map.values());
+
+    return {
+      questions: {
+        labels: question_dates,
+        datasets: [
+          {
+            label: '# of questions',
+            data: question_nums,
+            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1,
+          },
+        ],
+      },
+      answers: {
+        labels: answer_dates,
+        datasets: [
+          {
+            label: '# of answers',
+            data: answer_nums,
+            backgroundColor: 'rgba(255, 159, 64, 0.2)',
+            borderColor: 'rgba(255, 159, 64, 1)',
+            borderWidth: 1,
+          },
+        ],
+      },
+    };
+  }
+
+  async questions_keyword() {
+    const keyw_find = await this.manager.find(Keyword_Finder);
+    const k_map = new Map<string, number>();
+    for (let i = 0; i < keyw_find.length; i++) {
+      const keyword = keyw_find[i].keyword;
+      if (k_map.has(keyword)) {
+        k_map.set(keyword, k_map.get(keyword) + 1);
+      } else {
+        k_map.set(keyword, 1);
+      }
+    }
+    const questions = Array.from(k_map.values());
+    const keywords = Array.from(k_map.keys());
+    return {
+      labels: keywords,
+      datasets: [
+        {
+          label: '# of questions per keyword',
+          data: questions,
+          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          borderColor: 'rgba(75, 192, 192, 1)',
+          borderWidth: 1,
+        },
+      ],
+    };
+  }
+
+  async postings_per_day(id: number) {
+    const questions = await this.manager.find(Question, { user_id: id });
+    const answers = await this.manager.find(Answer, { user_id: id });
+    const p_map = new Map<string, number>();
+
+    for (var i = 0; i < questions.length; i++) {
+      const date = questions[i].asked_on;
+      const date_s =
+        date.getUTCFullYear().toString() +
+        '-' +
+        (date.getUTCMonth() + 1).toString() +
+        '-' +
+        date.getUTCDate().toString();
+      if (p_map.has(date_s)) {
+        p_map.set(date_s, p_map.get(date_s) + 1);
+      } else {
+        p_map.set(date_s, 1);
+      }
+    }
+
+    for (var i = 0; i < answers.length; i++) {
+      const date = answers[i].answered_on;
+      const date_s =
+        date.getUTCFullYear().toString() +
+        '-' +
+        (date.getUTCMonth() + 1).toString() +
+        '-' +
+        date.getUTCDate().toString();
+      if (p_map.has(date_s)) {
+        p_map.set(date_s, p_map.get(date_s) + 1);
+      } else {
+        p_map.set(date_s, 1);
+      }
+    }
+
+    const posting_dates = Array.from(p_map.keys());
+    const posting_nums = Array.from(p_map.values());
+
+    return {
+      labels: posting_dates,
+      datasets: [
+        {
+          label: '# of postings per day',
+          data: posting_nums,
+          backgroundColor: 'rgba(153, 102, 255, 0.2)',
+          borderColor: 'rgba(153, 102, 255, 1)',
+          borderWidth: 1,
+        },
+      ],
+    };
   }
 }
