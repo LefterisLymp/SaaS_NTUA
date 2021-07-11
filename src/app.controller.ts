@@ -41,8 +41,7 @@ export class AppController {
     @Payload() data: any,
     @Ctx() context: RedisContext,
   ): Promise<Question[]> {
-    return this.searchService.filter_by_date(
-      data.questions_array,
+    return this.searchService.search_by_date(
       data.from_date,
       data.to_date,
     );
