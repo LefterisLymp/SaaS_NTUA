@@ -180,4 +180,37 @@ export class AppController {
       to_date: to_date,
     });
   }
+
+  @Post('/api/search/date')
+  async filterByDate(
+    @Body('from_date') from_date,
+    @Body('to_date') to_date,
+  ) {
+    return this.rabbitMQService.send('filter-by-date', {
+      from_date: from_date,
+      to_date: to_date,
+    });
+  }
+
+  @Get('api/search/user_id/:id')
+  async q_a_byid(@Param('id', new ParseIntPipe()) id) {
+    return this.rabbitMQService.send('q&a-by-id', {
+      id: id,
+    });
+  }
+
+  @Get('api/search/day')
+  async q_a_byday() {
+    return this.rabbitMQService.send('q&a-by-day', {});
+  }
+
+  @Get('api/search/questions_per_keyword')
+  async q_per_keyword() {
+    return this.rabbitMQService.send('questions_per_keyword', {});
+  }
+
+  @Get('api/search/postings/:id')
+  async postings_per_day(@Param('id', new ParseIntPipe()) id) {
+    return this.rabbitMQService.send('postings-per-day', { id: id });
+  }
 }
