@@ -35,9 +35,6 @@ export class ServiceBus {
               private jwtServise: JwtService,
               ) {}
 
-  @Get('/')
-  async getgreeting() {return "Hello world!";}
-
   @MessagePattern('register')
   async register(
       @Payload() data: any,
@@ -151,7 +148,6 @@ export class ServiceBus {
     channel.ack(originalMessage)
     return this.questionService.DeleteQuestion(data.id)
   }
-
   @MessagePattern('question-all')
   getallQuest(@Payload() data: any,
               @Ctx() context: RmqContext) {
@@ -159,7 +155,8 @@ export class ServiceBus {
     const originalMessage = context.getMessage();
     channel.ack(originalMessage)
     return this.questionService.getAll()
-  }  //End of question endpoints
+  }
+  //End of question endpoints
 
   //Answer endpoints
   @MessagePattern('create-answer')
@@ -225,7 +222,6 @@ export class ServiceBus {
     channel.ack(originalMessage)
     return this.searchService.search_by_date(data.from_date, data.to_date);
   }
-
   @MessagePattern('q&a-by-id')
   QAbyid(@Payload() data: any,
          @Ctx() context: RmqContext) {
@@ -246,7 +242,7 @@ export class ServiceBus {
 
   @MessagePattern('questions_per_keyword')
   Questionsperkeyword(@Payload() data: any,
-          @Ctx() context: RmqContext) {
+                      @Ctx() context: RmqContext) {
     const channel = context.getChannelRef();
     const originalMessage = context.getMessage();
     channel.ack(originalMessage)
@@ -255,7 +251,7 @@ export class ServiceBus {
 
   @MessagePattern('postings-per-day')
   PostingsPerDay(@Payload() data: any,
-                      @Ctx() context: RmqContext) {
+                 @Ctx() context: RmqContext) {
     const channel = context.getChannelRef();
     const originalMessage = context.getMessage();
     channel.ack(originalMessage)
