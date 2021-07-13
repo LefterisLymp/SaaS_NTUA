@@ -8,7 +8,7 @@ const MyQaA = (props) => {
       useEffect(()=>{
         setIsLoading(true);
         
-            fetch('https://service-bus.herokuapp.com/api/user',{
+            fetch('http://localhost:3006/api/user',{
                 method: 'GET',
                 headers: {'Content-Type': 'application/json'},
                 credentials: 'include',

@@ -6,7 +6,7 @@ const ChartPerKeyword = () => {
     const [data,setData] = useState<any>([]);
 
     const getData=()=>{
-        fetch('https://service-bus.herokuapp.com/api/search/questions_per_keyword',{
+        fetch('http://localhost:3006/api/search/questions_per_keyword',{
             method: 'GET',
             headers: {'Content-Type': 'application/json'},
             credentials: 'include',

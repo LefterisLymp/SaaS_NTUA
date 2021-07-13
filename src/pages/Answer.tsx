@@ -10,7 +10,7 @@ const Answer = (props: { id: string }) => {
     const [redirect, setRedirect] = useState(false);
 
     const getData=()=>{
-        fetch('https://service-bus.herokuapp.com/api/question/all',{
+        fetch('http://localhost:3006/api/question/all',{
             method: 'GET',
             headers: {'Content-Type': 'application/json'},
             credentials: 'include',
@@ -32,7 +32,7 @@ const Answer = (props: { id: string }) => {
 
       const getAnswer = async (e) => {
         console.log(e);
-        const response = await fetch('https://service-bus.herokuapp.com/api/question/view/'+e,{
+        const response = await fetch('http://localhost:3006/api/question/view/'+e,{
             method: 'GET',
             headers: {'Content-Type': 'application/json'},
             credentials: 'include',
@@ -52,7 +52,7 @@ const Answer = (props: { id: string }) => {
 
     const submit = async (e: SyntheticEvent) => {
       e.preventDefault();
-      await fetch('https://service-bus.herokuapp.com/api/answer/create', {
+      await fetch('http://localhost:3006/api/answer/create', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({

@@ -9,7 +9,7 @@ const Login = (props: { setUsername: (username: string) => void }) => {
     const submit = async (e: SyntheticEvent) => {
         e.preventDefault();
         console.log(username);
-        const response = await fetch('https://service-bus.herokuapp.com/api/login', {
+        const response = await fetch('http://localhost:3006/api/login', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             credentials: 'include',

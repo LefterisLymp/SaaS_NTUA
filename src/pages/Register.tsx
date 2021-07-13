@@ -12,7 +12,7 @@ const Register = () => {
     const submit = async (e: SyntheticEvent) => {
         e.preventDefault();
 
-        await fetch('https://service-bus.herokuapp.com/api/register', {
+        await fetch('http://localhost:3006/api/register', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({

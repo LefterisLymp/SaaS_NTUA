@@ -3,7 +3,7 @@ import {Link} from "react-router-dom";
 
 const Nav = (props: { username: string, setUsername: (username: string) => void }) => {
     const logout = async () => {
-        await fetch('https://service-bus.herokuapp.com/api/logout', {
+        await fetch('http://localhost:3006/api/logout', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             credentials: 'include',

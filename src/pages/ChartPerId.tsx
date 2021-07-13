@@ -9,7 +9,7 @@ const ChartPerId = () => {
       useEffect(()=>{
         setIsLoading(true);
         
-            fetch('https://service-bus.herokuapp.com/api/user',{
+            fetch('http://localhost:3006/api/user',{
                 method: 'GET',
                 headers: {'Content-Type': 'application/json'},
                 credentials: 'include',
@@ -22,7 +22,7 @@ const ChartPerId = () => {
                 setUserId(myJson.id)
               });
 
-        fetch('https://service-bus.herokuapp.com/api/search/postings/'+user_id,{
+        fetch('http://localhost:3006/api/search/postings/'+user_id,{
             method: 'GET',
             headers: {'Content-Type': 'application/json'},
             credentials: 'include',
