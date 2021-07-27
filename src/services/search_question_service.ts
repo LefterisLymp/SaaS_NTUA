@@ -3,6 +3,7 @@ import { EntityManager } from 'typeorm';
 import { InjectEntityManager } from '@nestjs/typeorm';
 import { Keyword_Finder } from '../models/keyword_finder/keyword_finder.entity';
 import { Keyword } from '../models/keyword/keyword.entity';
+import { Answer } from '../models/answers/answer.entity';
 
 export class Search_question_service{
 
