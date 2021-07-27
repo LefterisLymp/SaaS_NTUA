@@ -54,28 +54,46 @@ export class QuestionController {
   }
 
   @Get('/api/search')
-  searchByKeyword(@Body() keyword): Promise<Question[]> {
-    const keyw = keyword;
-    return this.searchService.search_by_keyword(keyw.keyword);
+  searchByKeyword(@Body('keyword') keyword: string): Promise<Question[]> {
+    return this.searchService.search_by_keyword(keyword);
   }
 
   @Get('/api/filter/keyword')
-  filterByKeyword(@Body() questions, keywords): Promise<Question[]> {
+  filterByKeyword(@Body('questions') questions,
+                  @Body('keyword') keyword: string,): Promise<Question[]> {
     const questions_array = JSON.parse(questions.toString());
-    const keywords_array = JSON.parse(keywords.toString());
     return this.searchService.filter_by_keyword(
       questions_array,
-      keywords_array,
+      keyword
     );
   }
 
-  @Get('/api/filter/date')
-  filterByDate(@Body() questions, from_date, to_date): Promise<Question[]> {
-    const questions_array = JSON.parse(questions.toString());
-    return this.searchService.filter_by_date(
-      questions_array,
-      from_date,
-      to_date,
-    );
+  @Post('/api/search/date')
+  async filterByDate(
+    @Body('from_date') from_date,
+    @Body('to_date') to_date,
+  ) {
+    return this.searchService.search_by_date(from_date, to_date)
   }
+
+  @Get('api/search/user_id/:id')
+  async q_a_byid(@Param('id', new ParseIntPipe()) id) {
+    return this.searchService.QAperUserid(id);
+  }
+
+  @Get('api/search/day')
+  async q_a_byday() {
+    return this.searchService.QAperDay();
+  }
+
+  @Get('api/search/questions_per_keyword')
+  async q_per_keyword() {
+    return this.searchService.questions_keyword();
+  }
+
+  @Get('api/search/postings/:id')
+  async postings_per_day(@Param('id', new ParseIntPipe()) id) {
+    return this.searchService.postings_per_day(id);
+  }
+}
 }
